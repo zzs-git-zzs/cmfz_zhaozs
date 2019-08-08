@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.AlbumDao">
+
+    <resultMap id="AlbumMap" type="Album">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="author" property="author"/>
+        <result column="score" property="score"/>
+        <result column="cover_img" property="coverImg"/>
+        <result column="broadcast" property="broadcast"/>
+        <result column="acount" property="acount"/>
+        <result column="content" property="content"/>
+        <result column="pub_date" property="pubDate"/>
+    </resultMap>
+
+    <!--添加-->
+    <insert id="insert">
+        insert into album (id,title,author,score,cover_img,broadcast,acount,content,pub_date) values(#{id},#{title},#{author},#{score},#{coverImg},#{broadcast},#{acount},#{content},#{pubDate})
+    </insert>
+
+    <!--查询所有的专辑-->
+    <select id="selectAll" resultMap="AlbumMap">
+        select id,title,author,score,cover_img,broadcast,acount,content,pub_date from album limit #{start},#{rows}
+    </select>
+
+    <!--查询总条数-->
+    <select id="selectCount" resultType="Integer">
+        select count(*) from album
+    </select>
+    <!--删除专辑-->
+    <delete id="delete">
+        delete from album where id=#{id}
+    </delete>
+
+    <!--修改专辑-->
+    <update id="update">
+        update album
+        <set>
+            <if test="title!=null">title=#{title},</if>
+            <if test="author!=null">author=#{author},</if>
+            <if test="score!=null">score=#{score},</if>
+            <if test="coverImg!=null">cover_img=#{coverImg},</if>
+            <if test="broadcast!=null">broadcast=#{broadcast},</if>
+            <if test="acount!=null">acount=#{acount},</if>
+            <if test="content!=null">content=#{content},</if>
+            <if test="pubDate!=null">pub_date=#{pubDate},</if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <!--根据id查询一个专辑及其列表-->
+    <resultMap id="res" type="Album">
+        <id column="aid" property="id"/>
+        <result column="title" property="title"/>
+        <result column="author" property="author"/>
+        <result column="score" property="score"/>
+        <result column="cover_img" property="coverImg"/>
+        <result column="broadcast" property="broadcast"/>
+        <result column="acount" property="acount"/>
+        <result column="content" property="content"/>
+        <result column="pub_date" property="pubDate"/>
+        <collection property="list" ofType="Chapter">
+            <id column="cid" property="id"/>
+            <result column="url" property="url"/>
+            <result column="size" property="size"/>
+            <result column="duration" property="duration"/>
+            <result column="up_date" property="upDate"/>
+            <result column="album_id" property="albumId"/>
+        </collection>
+    </resultMap>
+     <select id="selectOne" resultMap="res">
+        select  a.id as aid,a.title,a.author,a.score,a.cover_img,a.broadcast,a.acount,a.content,a.pub_date,
+                c.id as cid,c.url,c.size,c.duration,c.up_date,c.album_id
+        from album a left join chapter c on a.id=c.album_id where a.id=#{id}
+     </select>
+
+    <select id="selectOneAlbum" resultMap="AlbumMap">
+        select id,title,author,score,cover_img,broadcast,acount,content,pub_date from album where id=#{id}
+    </select>
+
+</mapper>

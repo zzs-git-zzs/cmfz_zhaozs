@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.CarouselDao">
+
+    <!--查询所有-->
+    <select id="selectAll" resultType="Carousel">
+        select * from carousel
+        limit  ${(page-1)*rows},#{rows}
+    </select>
+
+    <select id="selectcount" resultType="int">
+        select count(*) from carousel
+    </select>
+
+    <!--添加-->
+    <insert id="insert">
+        insert into carousel values (#{id},#{username},#{path},#{status},#{cupdate},#{cdescribe})
+    </insert>
+
+    <!--删除-->
+    <delete id="delete">
+        delete from carousel where id=#{id}
+    </delete>
+<update id="update">
+    update carousel
+    <set>
+        <if test="username!=null">
+            username=#{username},
+        </if>
+        <if test="path!=null">
+            path=#{path},
+        </if>
+        <if test="status!=null">
+            status=#{status},
+        </if>
+        <if test="cupdate!=null">
+            cupdate=#{cupdate},
+        </if>
+        <if test="cdescribe!=null">
+            cdescribe=#{cdescribe},
+        </if>
+    </set>
+    where id=#{id}
+</update>
+
+
+    <!--根据id查询一个 做回显有可能用-->
+    <select id="selectOne" resultType="Carousel">
+        select * from carousel where id=#{id}
+    </select>
+
+    <update id="updateStatus">
+        update carousel
+        <set>
+            <if test="status!=null">status=#{status}</if>
+        </set>
+        where id=#{id}
+    </update>
+
+</mapper>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.UserDao">
+
+    <resultMap id="UserMap" type="User">
+        <id column="id" property="id"/>
+        <result column="phone" property="phone"/>
+        <result column="password" property="password"/>
+        <result column="salt" property="salt"/>
+        <result column="pic_img" property="picImg"/>
+        <result column="ahama" property="ahama"/>
+        <result column="name" property="name"/>
+        <result column="sex" property="sex"/>
+        <result column="ciry" property="ciry"/>
+        <result column="sign" property="sign"/>
+        <result column="status" property="status"/>
+        <result column="reg_date" property="regDate"/>
+        <result column="guruId" property="guruId"/>
+    </resultMap>
+
+    <select id="selectAll" resultMap="UserMap">
+        select id,phone,password,salt,pic_img,ahama,name,sex,ciry,sign,status,reg_date,guruId from t_user limit #{start},#{rows}
+    </select>
+
+    <select id="selectOne" resultMap="UserMap">
+        select id,phone,password,salt,pic_img,ahama,name,sex,ciry,sign,status,reg_date,guruId from t_user where id=#{id}
+    </select>
+
+    <select id="selectCount" resultType="Integer">
+        select count(*) from t_user
+    </select>
+
+    <update id="updateStatus">
+        update t_user
+        <set>
+            <if test="status!=null">status=#{status}</if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <select id="showAllTwo" resultMap="UserMap">
+        select id,phone,password,salt,pic_img,ahama,name,sex,ciry,sign,status,reg_date,guruId from t_user
+    </select>
+
+    <insert id="regist">
+        insert into t_user (id,phone,password,salt,pic_img,ahama,name,sex,ciry,sign,status,reg_date,guruId)
+        values (#{id},#{phone},#{password},#{salt},#{picImg},#{ahama},#{name},#{sex},#{ciry},#{sign},#{status},#{regDate},#{guruId})
+    </insert>
+</mapper>
